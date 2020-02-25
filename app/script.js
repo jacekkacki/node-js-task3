@@ -15,27 +15,28 @@ class App extends React.Component {
     return `${(minutes < 10? `0${minutes}`: minutes)}:${(seconds < 10? `0${seconds}`:seconds)}`;
   }
 
+  // setState has an optional second parameter which is a callback function
   step = () => {
     this.setState({
       time: this.state.time - 1
+    }, () => {
+      if(this.state.time == 0) {
+        if(this.state.status === 'work'){
+          this.setState ({
+            status: 'rest',
+            time: 20
+          });
+          this.playBell();
+        }
+        else if(this.state.status === 'rest'){
+          this.setState ({
+          status: 'work',
+            time: 1200
+          });
+          this.playBell();
+        }
+      }
     });
-
-    if(this.state.time == 0) {
-      if(this.state.status === 'work'){
-        this.setState ({
-          status: 'rest',
-          time: 20
-        });
-        this.playBell();
-      }
-      else if(this.state.status === 'rest'){
-        this.setState ({
-        status: 'work',
-          time: 1200
-        });
-        this.playBell();
-      }
-    }
   };
 
   startTimer = () => {
